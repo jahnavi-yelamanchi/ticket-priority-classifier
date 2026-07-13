@@ -57,4 +57,6 @@ Local and Docker run instructions will be added with the service implementation.
 
 ## Dataset and metrics
 
-The implementation will document the exact public dataset, license/source, class counts, split seed, Macro F1, per-class confusion matrix, ONNX model size, and P50/P95 CPU latency. Results will be reported only after they are measured.
+Training uses the public Hugging Face dataset [`Tobi-Bueck/customer-support-tickets`](https://huggingface.co/datasets/Tobi-Bueck/customer-support-tickets). Its source priority values are normalized into the stable API vocabulary: `low`, `medium`, `high`, and `urgent` (`critical` maps to `urgent`).
+
+The reproducible split is stratified 80/10/10 with seed `42`. The training run will record source metadata, class counts, Macro F1, per-class confusion matrix, ONNX model size, and P50/P95 CPU latency. Results will be reported only after they are measured.
