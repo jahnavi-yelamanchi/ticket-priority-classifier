@@ -48,12 +48,11 @@ The demo is an original dark editorial interface informed by the supplied Framer
 ## Planned commands
 
 ```bash
-# Train, evaluate, export, and deploy via Modal (added in the next milestones)
+# Run the Modal GPU fine-tuning job
 modal run modal_app/train.py
-modal deploy modal_app/service.py
 ```
 
-Local and Docker run instructions will be added with the service implementation.
+The training command creates a timestamped FP32 checkpoint in the `triage-model-artifacts` Modal Volume. ONNX export, local serving, Docker, and deployment commands will be added with their respective milestones.
 
 ## Dataset and metrics
 
