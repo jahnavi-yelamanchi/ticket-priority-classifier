@@ -53,9 +53,12 @@ modal run modal_app/train.py
 
 # Export its FP32 checkpoint, quantize to INT8, and select it for serving
 modal run modal_app/export.py --run-id 20260713T000000Z
+
+# Deploy the API after a production model has been selected
+modal deploy modal_app/service.py
 ```
 
-The training command creates a timestamped FP32 checkpoint in the `triage-model-artifacts` Modal Volume. Export records both FP32 and INT8 artifact size plus P50/P95 CPU latency, then stores the selected production run in the same Volume. Local serving, Docker, and deployment commands will be added with their respective milestones.
+The training command creates a timestamped FP32 checkpoint in the `triage-model-artifacts` Modal Volume. Export records both FP32 and INT8 artifact size plus P50/P95 CPU latency, then stores the selected production run in the same Volume. The Modal deployment serves `/health`, `/predict`, `/metrics`, and interactive API docs at `/docs`.
 
 ## Dataset and metrics
 
