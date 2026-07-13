@@ -1,0 +1,21 @@
+.DS_Store
+.env
+.venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+htmlcov/
+.coverage
+dist/
+build/
+*.egg-info/
+
+# Model and dataset outputs are reproducible, not source-controlled.
+artifacts/*.onnx
+artifacts/*.bin
+artifacts/*.safetensors
+artifacts/*.jsonl
+data/raw/
+data/processed/
