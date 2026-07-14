@@ -15,7 +15,7 @@ service_image = (
         "onnxruntime>=1.19,<2.0",
         "transformers>=4.45,<5.0",
     )
-    .add_local_python_source("app")
+    .add_local_python_source("app", "modal_app")
     .add_local_dir("app/static", remote_path="/root/app/static")
 )
 

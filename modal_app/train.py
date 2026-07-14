@@ -31,6 +31,7 @@ training_image = (
         "torch>=2.4,<3.0",
         "transformers>=4.45,<5.0",
     )
+    .add_local_python_source("modal_app")
 )
 
 
