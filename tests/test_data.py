@@ -14,6 +14,8 @@ from modal_app.data import (
 class DatasetNormalizationTests(unittest.TestCase):
     def test_normalize_priority_maps_source_variants(self) -> None:
         self.assertEqual(normalize_priority("Critical"), "urgent")
+        self.assertEqual(normalize_priority("very_low"), "low")
+        self.assertEqual(normalize_priority("VERY HIGH"), "urgent")
         self.assertEqual(normalize_priority("normal"), "medium")
         self.assertEqual(normalize_priority("LOW"), "low")
 

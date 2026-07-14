@@ -20,10 +20,12 @@ SPLIT_SEED = 42
 _TEXT_COLUMNS = ("ticket_description", "ticket", "description", "body", "text")
 _PRIORITY_COLUMNS = ("ticket_priority", "priority", "severity")
 _PRIORITY_ALIASES = {
+    "very_low": "low",
     "low": "low",
     "medium": "medium",
     "normal": "medium",
     "high": "high",
+    "very_high": "urgent",
     "urgent": "urgent",
     "critical": "urgent",
 }
