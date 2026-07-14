@@ -23,6 +23,7 @@ export_image = (
     .pip_install(
         "numpy>=1.26,<3.0",
         "onnx>=1.16,<2.0",
+        "onnxscript>=0.1,<1.0",
         "onnxruntime>=1.19,<2.0",
         "torch>=2.4,<3.0",
         "transformers>=4.45,<5.0",
