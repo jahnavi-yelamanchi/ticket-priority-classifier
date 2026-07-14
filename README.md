@@ -6,7 +6,9 @@ The project is designed to demonstrate the full lifecycle of a compact NLP model
 
 ## Status
 
-Repository scaffolding is in place. The next implementation milestones add the dataset pipeline, Modal GPU training, evaluation, optimized artifact, FastAPI service, and demo UI.
+The classifier is trained, exported to ONNX, dynamically quantized to INT8, and deployed on Modal. The public demo and API use the promoted INT8 artifact from the Modal Volume.
+
+Live demo: [Triage on Modal](https://jahnavi-yelamanchi--triage-ticket-priority-classifier-fa-e7151d.modal.run)
 
 ## Target architecture
 
@@ -45,14 +47,14 @@ tests/      Unit and API tests
 
 The demo is an original dark editorial interface informed by the supplied Framer reference: a near-black canvas, assertive white display type, charcoal product panels, white pill actions, a blue keyboard-focus state, and a single violet spotlight card. It calls the deployed `/predict` endpoint directly and fills its result/metric panels only with live API data. It uses no Framer branding, invented benchmark claims, or LLM-generated rationales. See [the design brief](docs/design-brief.md).
 
-## Planned commands
+## Run the pipeline
 
 ```bash
 # Run the Modal GPU fine-tuning job
 modal run modal_app/train.py
 
 # Export its FP32 checkpoint, quantize to INT8, and select it for serving
-modal run modal_app/export.py --run-id 20260713T000000Z
+modal run modal_app/export.py --run-id <training-run-id>
 
 # Deploy the API after a production model has been selected
 modal deploy modal_app/service.py
@@ -74,8 +76,24 @@ docker run --rm -p 8000:8000 -v "$PWD/artifacts:/models:ro" triage-api
 
 For the complete Modal training → export → deploy sequence, see [deployment instructions](docs/deployment.md).
 
-## Dataset and metrics
+## Dataset and measured results
 
-Training uses the public Hugging Face dataset [`Tobi-Bueck/customer-support-tickets`](https://huggingface.co/datasets/Tobi-Bueck/customer-support-tickets). Its source priority values are normalized into the stable API vocabulary: `low`, `medium`, `high`, and `urgent` (`critical` maps to `urgent`).
+Training uses the public Hugging Face dataset [`Tobi-Bueck/customer-support-tickets`](https://huggingface.co/datasets/Tobi-Bueck/customer-support-tickets). Source priority variants are normalized into the stable API vocabulary: `very_low` and `low` become `low`; `normal` and `medium` become `medium`; `high` remains `high`; `very_high`, `critical`, and `urgent` become `urgent`.
 
-The reproducible split is stratified 80/10/10 with seed `42`. The training run will record source metadata, class counts, Macro F1, per-class confusion matrix, ONNX model size, and P50/P95 CPU latency. Results will be reported only after they are measured.
+The reproducible split is stratified 80/10/10 with seed `42`. The completed run (`20260714T010514Z`) trained on 49,411 tickets, validated on 6,176, and evaluated on 6,178 held-out tickets.
+
+| Priority | Train | Validation | Test |
+| --- | ---: | ---: | ---: |
+| Low | 11,638 | 1,455 | 1,455 |
+| Medium | 18,702 | 2,338 | 2,338 |
+| High | 17,540 | 2,192 | 2,193 |
+| Urgent | 1,531 | 191 | 192 |
+
+The held-out test Macro F1 is **0.533** (accuracy **0.550**). This result is reported as measured, including the dataset's substantial urgent-class imbalance.
+
+| Artifact | Model size | P50 latency | P95 latency |
+| --- | ---: | ---: | ---: |
+| FP32 ONNX | 255.5 MB | 32.750 ms | 92.882 ms |
+| INT8 ONNX | 64.3 MB | 17.154 ms | 51.626 ms |
+
+The benchmarks were recorded with ONNX Runtime CPU inference on the Modal export worker. INT8 reduced the stored model from 267,961,451 to 67,387,526 bytes while also lowering measured latency.
