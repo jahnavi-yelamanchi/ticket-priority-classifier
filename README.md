@@ -43,7 +43,7 @@ tests/      Unit and API tests
 
 ## Design direction
 
-The demo is an original dark editorial interface informed by the supplied Framer reference: a near-black canvas, assertive white display type, charcoal product panels, white pill actions, a blue keyboard-focus state, and a single violet spotlight card. It uses no Framer branding, invented benchmark claims, or LLM-generated rationales. See [the design brief](docs/design-brief.md).
+The demo is an original dark editorial interface informed by the supplied Framer reference: a near-black canvas, assertive white display type, charcoal product panels, white pill actions, a blue keyboard-focus state, and a single violet spotlight card. It calls the deployed `/predict` endpoint directly and fills its result/metric panels only with live API data. It uses no Framer branding, invented benchmark claims, or LLM-generated rationales. See [the design brief](docs/design-brief.md).
 
 ## Planned commands
 

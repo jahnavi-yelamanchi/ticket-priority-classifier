@@ -16,6 +16,7 @@ service_image = (
         "transformers>=4.45,<5.0",
     )
     .add_local_python_source("app")
+    .add_local_dir("app/static", remote_path="/root/app/static")
 )
 
 

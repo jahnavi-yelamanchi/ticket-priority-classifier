@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Triage classifies customer-support tickets by priority." />
+    <title>Triage — Support ticket priority</title>
+    <link rel="stylesheet" href="/static/styles.css" />
+  </head>
+  <body>
+    <header class="site-header shell">
+      <a class="wordmark" href="/" aria-label="Triage home">Triage</a>
+      <nav aria-label="Primary navigation">
+        <a href="/docs">Documentation</a>
+        <a href="https://github.com/jahnavi-yelamanchi/ticket-priority-classifier">GitHub</a>
+        <a class="button button-primary nav-action" href="#classifier">Try the API</a>
+      </nav>
+    </header>
+
+    <main class="shell">
+      <section class="hero" aria-labelledby="page-title">
+        <h1 id="page-title">Know what<br />needs attention.</h1>
+        <p>Triage classifies support tickets by priority so your team focuses on what matters most.</p>
+      </section>
+
+      <section class="classifier" id="classifier" aria-label="Ticket priority classifier">
+        <form id="prediction-form" class="ticket-form">
+          <div class="field-heading">
+            <label for="ticket">1. Paste a support ticket</label>
+            <button class="text-button" type="button" id="clear-ticket">Clear</button>
+          </div>
+          <textarea id="ticket" name="ticket" maxlength="10000" required aria-describedby="ticket-hint">Subject: Checkout failing for most users
+
+Since 10:15 AM PT, customers are unable to complete checkout. The issue is affecting every region and we have not been able to mitigate it.</textarea>
+          <div class="field-meta">
+            <span id="ticket-hint">Paste plain text. Maximum 10,000 characters.</span>
+            <span id="character-count" aria-live="polite">0 characters</span>
+          </div>
+          <button class="button button-primary submit-button" type="submit">
+            Classify priority
+            <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M3 10h13M11 4l6 6-6 6" /></svg>
+          </button>
+        </form>
+
+        <section class="result-panel" aria-labelledby="result-title">
+          <h2 id="result-title">2. Classification result</h2>
+          <div class="result-box" id="result-box" data-state="idle" aria-live="polite">
+            <p class="result-status">Ready to classify</p>
+            <p class="result-main" id="result-priority">Paste a ticket</p>
+            <p class="result-detail" id="result-detail">Your deployed model will return priority and confidence here.</p>
+          </div>
+          <div class="probabilities" id="probabilities" hidden>
+            <p>Priority probabilities</p>
+            <dl id="probability-list"></dl>
+          </div>
+          <a class="api-link" href="/docs">View the API docs <span aria-hidden="true">→</span></a>
+        </section>
+      </section>
+
+      <section class="evidence-grid" aria-label="Model evidence">
+        <article class="evidence-card">
+          <h2>Evaluation</h2>
+          <p>Held-out Macro F1</p>
+          <strong id="macro-f1">—</strong>
+          <p class="evidence-note" id="evaluation-note">Available after the first training run.</p>
+        </article>
+        <article class="evidence-card">
+          <h2>Runtime</h2>
+          <p>INT8 P95 latency</p>
+          <strong id="latency">—</strong>
+          <p class="evidence-note" id="runtime-note">Available after ONNX export.</p>
+        </article>
+        <article class="spotlight-card">
+          <svg class="bolt" viewBox="0 0 32 32" aria-hidden="true"><path d="M18.8 2 5 18.2h9l-1.1 11.8L27 13.8h-9.1L18.8 2Z" /></svg>
+          <h2>Built for speed</h2>
+          <p>One disciplined path from GPU fine-tuning to optimized CPU inference.</p>
+          <ul>
+            <li>Modal GPU training</li>
+            <li>ONNX Runtime</li>
+            <li>INT8 quantization</li>
+          </ul>
+        </article>
+      </section>
+    </main>
+
+    <script src="/static/app.js" defer></script>
+  </body>
+</html>
