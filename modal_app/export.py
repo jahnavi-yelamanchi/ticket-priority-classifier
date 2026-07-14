@@ -77,7 +77,7 @@ def export_and_quantize(run_id: str) -> dict[str, object]:
 
     fp32_onnx = run_path / "model-fp32.onnx"
     torch.onnx.export(
-        LogitsOnly(model),
+        LogitsOnly(model).eval(),
         (sample["input_ids"], sample["attention_mask"]),
         fp32_onnx,
         input_names=["input_ids", "attention_mask"],
@@ -88,6 +88,9 @@ def export_and_quantize(run_id: str) -> dict[str, object]:
             "logits": {0: "batch"},
         },
         opset_version=17,
+        # The newer dynamo exporter currently writes inconsistent symbolic
+        # shapes for this DistilBERT graph, which prevents ORT quantization.
+        dynamo=False,
     )
     int8_onnx = run_path / "model-int8.onnx"
     quantize_dynamic(fp32_onnx, int8_onnx, weight_type=QuantType.QInt8)
