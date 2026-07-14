@@ -60,6 +60,20 @@ modal deploy modal_app/service.py
 
 The training command creates a timestamped FP32 checkpoint in the `triage-model-artifacts` Modal Volume. Export records both FP32 and INT8 artifact size plus P50/P95 CPU latency, then stores the selected production run in the same Volume. The Modal deployment serves `/health`, `/predict`, `/metrics`, and interactive API docs at `/docs`.
 
+## Run and deploy
+
+```bash
+# Local API (requires a promoted artifact at TRIAGE_ARTIFACTS_PATH)
+export TRIAGE_ARTIFACTS_PATH="$PWD/artifacts"
+uvicorn app.main:app --reload
+
+# Docker API (mount the promoted model artifact directory)
+docker build -t triage-api .
+docker run --rm -p 8000:8000 -v "$PWD/artifacts:/models:ro" triage-api
+```
+
+For the complete Modal training → export → deploy sequence, see [deployment instructions](docs/deployment.md).
+
 ## Dataset and metrics
 
 Training uses the public Hugging Face dataset [`Tobi-Bueck/customer-support-tickets`](https://huggingface.co/datasets/Tobi-Bueck/customer-support-tickets). Its source priority values are normalized into the stable API vocabulary: `low`, `medium`, `high`, and `urgent` (`critical` maps to `urgent`).
