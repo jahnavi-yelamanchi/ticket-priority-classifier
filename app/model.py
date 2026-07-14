@@ -82,11 +82,13 @@ class TriageModel:
         return prediction_payload(self._labels, logits)
 
     def health(self) -> dict[str, object]:
-        """Return a safe readiness payload without loading a model on status requests."""
+        """Load the promoted artifact once, then report its actual readiness."""
 
-        if self.ready:
-            return {"status": "ready", "run_id": self._run_id}
-        return {"status": "not_ready"}
+        try:
+            self.load()
+        except ModelNotReadyError:
+            return {"status": "not_ready"}
+        return {"status": "ready", "run_id": self._run_id}
 
     def metrics(self) -> dict[str, object]:
         """Return measured training and optimization metadata for the promoted run."""
