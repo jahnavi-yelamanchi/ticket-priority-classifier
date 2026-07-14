@@ -100,7 +100,7 @@ def train() -> dict[str, object]:
             per_device_eval_batch_size=32,
             learning_rate=2e-5,
             weight_decay=0.01,
-            evaluation_strategy="epoch",
+            eval_strategy="epoch",
             save_strategy="no",
             logging_strategy="steps",
             logging_steps=25,
